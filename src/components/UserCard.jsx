@@ -17,7 +17,7 @@ export const UserCard = ({ username }) => {
     } catch (error) {
       console.error('Error fetching user:', error)
     }
-  }, [])
+  }, [searchQuery])
 
   return (
     <Container Container maxWidth='xs' sx={{ mt: 3 }}>
