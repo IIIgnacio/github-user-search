@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 import { Link } from "react-router-dom";
 
@@ -17,12 +17,16 @@ const pages = [
   { name: "Search Users", path: "UserSearch" },
   { name: "Search Repositories", path: "RepoSearch" },
   { name: "Historial Searchs", path: "UserCard" },
-
 ];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleLinkClick = () => {
+    // Abre el enlace en una nueva ventana
+    window.open("https://github.com", "_blank");
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,12 +41,12 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="fixed" color="inherit">
+      <Container maxWidth="x3">
         <Toolbar disableGutters>
-          <Link to="/">
-            <Box display='flex' alignItems='center'  >
-              <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Link to="https://github.com" target="_Blank">
+            <Box display="flex" alignItems="center">
+              <GitHubIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
               <Typography
                 variant="h6"
                 noWrap
@@ -57,22 +61,10 @@ function ResponsiveAppBar() {
                   color: "inherit",
                   textDecoration: "none",
                 }}
-              >
-                LOGO
-              </Typography>
+              ></Typography>
             </Box>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -98,7 +90,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <GitHubIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -117,12 +109,17 @@ function ResponsiveAppBar() {
           >
             Git
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex", alignItems: "flex-end" },
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "black", display: "block" }}
               >
                 <Link to={page.path}>{page.name}</Link>
               </Button>

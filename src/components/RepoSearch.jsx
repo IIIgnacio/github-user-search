@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Box, List, ListItem, Link } from '@mui/material';
+import { Typography, TextField, Button, Box, List, ListItem, Link, Grid, Card, CardContent } from '@mui/material';
 import { API_URL } from '../config/constants';
 
 const RepoSearch = () => {
@@ -7,18 +7,18 @@ const RepoSearch = () => {
   const [repos, setRepos] = useState([]);
   const [error, setError] = useState('');
 
- const handleSearch = async () => {
-    setError('');  // Resetea cualquier error anterior antes de empezar una nueva búsqueda
+  const handleSearch = async () => {
+    setError('');
     try {
-      const response = await fetch(`${API_URL}search/repositories?q=${name}`);
+      const response = await fetch(`${API_URL}/repos/${name}`);
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`); // Lanza un error si la respuesta de la API no es exitosa
+        throw new Error(`Error: ${response.status}`);
       }
       const data = await response.json();
-      setRepos(data.items || []);
+      setRepos(data.repositories.result || []);
     } catch (error) {
       console.error('Error fetching repositories:', error);
-      setError('Failed to fetch repositories. Please try again.');  // Actualiza el mensaje de error
+      setError('Failed to fetch repositories. Please try again.');
     }
   };
 
@@ -28,7 +28,7 @@ const RepoSearch = () => {
         mt: 2,
         display: "grid",
         gap: 2,
-        textAlign: "center"  
+        textAlign: "center",
       }}
     >
       <Typography variant="h3" component="h1" align="center" gutterBottom>
@@ -44,19 +44,27 @@ const RepoSearch = () => {
       <Button variant="contained" onClick={handleSearch}>
         Search
       </Button>
-      {error && <Typography color="error">{error}</Typography>}  
+      {error && <Typography color="error">{error}</Typography>}
       {repos.length > 0 && (
         <Box mt={2}>
-          <Typography variant="h3">Search Results:</Typography>
-          <List>
-            {repos.map((repo) => (
-              <ListItem key={repo.id}>
-                <Link href={repo.html_url} target="_blank" rel="noopener noreferrer">
-                  {repo.full_name}
-                </Link>
-              </ListItem>
-            ))}
-          </List>
+          <Typography variant="h2"> Search Results:</Typography>
+          <Card variant="outlined">
+            <CardContent>
+              <Grid container spacing={2} justifyContent="center">
+                {repos.map((repo) => (
+                  <Grid item key={repo.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <List>
+                      <ListItem>
+                        <Link href={repo.html_url} target="_blank" rel="noopener noreferrer">
+                          {repo.name}
+                        </Link>
+                      </ListItem>
+                    </List>
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
         </Box>
       )}
     </Box>
