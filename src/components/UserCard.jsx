@@ -10,25 +10,25 @@ const HistoryCard = () => {
   const { history, setHistory } = useHistory()
   const searchedLogins = useRef(new Set()) // Use useRef para mantener la persistencia entre renders
 
-  console.log(history)
-
   useEffect(() => {
     history.searchs.forEach(async (search) => {
       if (!searchedLogins.current.has(search.login)) {
         console.log('Fetching:', search.login)
         try {
+          // Fetch data here and update history
           const response = await axios.get(`${API_URL}/user/${search.login}`)
+
           setHistory((prev) => ({
             ...prev,
-            users: [...prev.users, response.data.user], // Asumiendo que la respuesta tiene una estructura { data: { user: ... } }
+            users: [...prev.users, response.data.user], // Append the new user data to the history
           }))
-          searchedLogins.current.add(search.login)
+          searchedLogins.current.add(search.login) // Add login to searched logins
         } catch (error) {
           console.error('Error fetching user:', error)
         }
       }
     })
-  }, [history.searchs])
+  }, [])
 
   return (
     <Box className='flex flex-col'>
