@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 import { API_URL } from '../config/constants'
 import { Box, Card, CardContent, Container, Typography } from '@mui/material'
 import axios from 'axios'
@@ -8,21 +8,18 @@ import { useHistory } from '../contexts/RequestContext'
 
 const HistoryCard = () => {
   const { history, setHistory } = useHistory()
-  const searchedLogins = useRef(new Set()) // Use useRef para mantener la persistencia entre renders
 
   useEffect(() => {
     history.searchs.forEach(async (search) => {
-      if (!searchedLogins.current.has(search.login)) {
-        console.log('Fetching:', search.login)
+      const hasLogin = history.users.some((user) => user.login === search.login)
+      if (history.searchs.length > 0 && !hasLogin) {
         try {
-          // Fetch data here and update history
           const response = await axios.get(`${API_URL}/user/${search.login}`)
 
           setHistory((prev) => ({
             ...prev,
-            users: [...prev.users, response.data.user], // Append the new user data to the history
+            users: [...prev.users, response.data.user],
           }))
-          searchedLogins.current.add(search.login) // Add login to searched logins
         } catch (error) {
           console.error('Error fetching user:', error)
         }
